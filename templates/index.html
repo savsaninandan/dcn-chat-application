@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>DCN Chat Application</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN
+====================================================== -->
+
+<div id="loginScreen" class="login-screen">
+
+    <div class="login-card">
+
+        <div class="logo">💬</div>
+
+        <h1>DCN Chat</h1>
+
+        <p class="subtitle">
+            Real-Time Multi-Client Chat Application
+        </p>
+
+        <div class="input-group">
+
+            <label>Username</label>
+
+            <input
+                id="usernameInput"
+                type="text"
+                maxlength="20"
+                placeholder="Enter username"
+                autocomplete="off"
+            >
+
+        </div>
+
+        <button
+            id="joinButton"
+            class="primary-button"
+        >
+            Join Chat
+        </button>
+
+        <p id="loginError" class="login-error"></p>
+
+        <div class="project-info">
+            Python • Flask-SocketIO • WebSocket
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CHAT APPLICATION
+====================================================== -->
+
+<div id="chatScreen" class="chat-screen hidden">
+
+
+    <!-- HEADER -->
+
+    <header class="chat-header">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                💬
+            </div>
+
+            <div>
+
+                <h2>DCN Chat</h2>
+
+                <div class="connection">
+
+                    <span
+                        id="connectionDot"
+                        class="status-dot"
+                    ></span>
+
+                    <span id="connectionStatus">
+                        Connecting...
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="header-user">
+            👤 <span id="headerUsername"></span>
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <div class="chat-layout">
+
+
+        <!-- =================================================
+             LEFT SIDEBAR
+        ================================================== -->
+
+        <aside class="sidebar">
+
+
+            <!-- CHAT MODES -->
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-heading">
+                    Chats
+                </div>
+
+                <button
+                    id="globalChatButton"
+                    class="mode-button active"
+                >
+                    🌐 Global Chat
+                </button>
+
+            </div>
+
+
+            <!-- ROOMS -->
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-heading room-heading">
+
+                    <span>
+                        🏠 Rooms
+                    </span>
+
+                    <button
+                        id="createRoomButton"
+                        class="small-plus"
+                        title="Create Room"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="roomList"
+                    class="room-list"
+                ></div>
+
+            </div>
+
+
+            <!-- ONLINE USERS -->
+
+            <div class="sidebar-section users-section">
+
+                <div class="sidebar-heading">
+
+                    <span>
+                        👥 Online Users
+                    </span>
+
+                    <span
+                        id="userCount"
+                        class="user-count"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+                <div
+                    id="userList"
+                    class="user-list"
+                ></div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             MAIN CHAT
+        ================================================== -->
+
+        <main class="chat-main">
+
+
+            <!-- TOP BAR -->
+
+            <div class="chat-topbar">
+
+                <div>
+
+                    <span class="chat-label">
+                        Current Chat
+                    </span>
+
+                    <strong id="chatTarget">
+                        🌐 Global Chat
+                    </strong>
+
+                </div>
+
+                <div class="top-actions">
+
+                    <button
+                        id="leaveRoomButton"
+                        class="clear-button hidden"
+                    >
+                        Leave Room
+                    </button>
+
+                    <button
+                        id="clearButton"
+                        class="clear-button"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- MESSAGES -->
+
+            <div
+                id="messages"
+                class="messages"
+            ></div>
+
+
+            <!-- TYPING -->
+
+            <div
+                id="typingIndicator"
+                class="typing-indicator"
+            ></div>
+
+
+            <!-- INPUT -->
+
+            <div class="message-area">
+
+
+                <!-- PRIVATE RECIPIENT -->
+
+                <div
+                    id="privateRow"
+                    class="recipient-row"
+                >
+
+                    <label>
+                        Private:
+                    </label>
+
+                    <select id="privateRecipient">
+
+                        <option value="">
+                            Select user
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="input-row">
+
+                    <button
+                        id="emojiButton"
+                        class="icon-button"
+                    >
+                        😊
+                    </button>
+
+                    <input
+                        id="messageInput"
+                        type="text"
+                        maxlength="500"
+                        placeholder="Type a message..."
+                        autocomplete="off"
+                    >
+
+                    <button
+                        id="sendButton"
+                        class="send-button"
+                    >
+                        Send ➤
+                    </button>
+
+                </div>
+
+
+                <!-- EMOJIS -->
+
+                <div
+                    id="emojiPanel"
+                    class="emoji-panel hidden"
+                >
+
+                    <button>😀</button>
+                    <button>😂</button>
+                    <button>😊</button>
+                    <button>😍</button>
+                    <button>😎</button>
+                    <button>👍</button>
+                    <button>👏</button>
+                    <button>🔥</button>
+                    <button>❤️</button>
+                    <button>🎉</button>
+                    <button>🚀</button>
+                    <button>💯</button>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     CREATE ROOM MODAL
+====================================================== -->
+
+<div
+    id="roomModal"
+    class="modal hidden"
+>
+
+    <div class="modal-card">
+
+        <h2>🏠 Create Room</h2>
+
+        <p>
+            Create a room and automatically join it.
+        </p>
+
+        <input
+            id="roomNameInput"
+            type="text"
+            maxlength="30"
+            placeholder="e.g. VLSI-Team"
+        >
+
+        <div class="modal-actions">
+
+            <button
+                id="cancelRoomButton"
+                class="clear-button"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="confirmRoomButton"
+                class="primary-button"
+            >
+                Create Room
+            </button>
+
+        </div>
+
+        <p
+            id="roomError"
+            class="login-error"
+        ></p>
+
+    </div>
+
+</div>
+
+
+<script
+    src="https://cdn.socket.io/4.8.1/socket.io.min.js"
+></script>
+
+<script
+    src="{{ url_for('static', filename='script.js') }}"
+></script>
+
+</body>
+
+</html>
