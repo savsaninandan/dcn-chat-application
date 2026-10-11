@@ -22,6 +22,29 @@ A browser-based, real-time multi-user chat application built for the **Data Comm
 - **System notifications:** Display join, leave, disconnect, and room lifecycle events.
 - **Input validation:** Validate usernames and room names and limit message length.
 - **Responsive interface:** UI adapts to desktop and mobile-sized screens.
+- **Public deployment:** Application is deployed and accessible through Render.
+
+## Screenshots
+
+### Multi-User Global Chat
+
+![Global Chat](screenshots/global-chat.png)
+
+### Room-Based Chat
+
+![Room Chat](screenshots/room-chat.png)
+
+### Multi-Client Testing
+
+![Multi-Client](screenshots/multi-client.png)
+
+### Mobile Responsive Interface
+
+![Mobile Interface](screenshots/mobile.jpeg)
+
+### Render Deployment
+
+![Render Deployment](screenshots/render-deployment.png)
 
 ## Technology Stack
 
@@ -59,19 +82,25 @@ The server uses each connection's Socket.IO session ID to address an individual 
 
 ```text
 dcn-chat-application/
-├── app.py                 # Flask-SocketIO backend and event handlers
-├── client.py              # Earlier TCP socket chat client
-├── server.py              # Earlier TCP socket chat server
-├── requirements.txt       # Python dependencies
-├── .python-version        # Python runtime version
+├── app.py                    # Flask-SocketIO backend and event handlers
+├── client.py                 # Earlier TCP socket chat client
+├── server.py                 # Earlier TCP socket chat server
+├── requirements.txt          # Python dependencies
+├── .python-version           # Python runtime version
+├── screenshots/
+│   ├── global-chat.png       # Multi-user global chat
+│   ├── room-chat.png         # Room-based chat
+│   ├── multi-client.png      # Multiple browser clients
+│   ├── mobile.jpeg           # Mobile interface
+│   └── render-deployment.png # Render deployment
 ├── templates/
-│   └── index.html         # Chat application markup
+│   └── index.html             # Chat application markup
 └── static/
-    ├── style.css          # Responsive UI styling
-    └── script.js          # Socket.IO client events and UI behavior
+    ├── style.css              # Responsive UI styling
+    └── script.js               # Socket.IO client events and UI behavior
 ```
 
-`client.py` and `server.py` preserve an earlier TCP-socket prototype. The browser-based application uses `app.py`, `templates/index.html`, and `static/`.
+`client.py` and `server.py` preserve an earlier TCP-socket prototype. The final browser-based application uses `app.py`, `templates/index.html`, and `static/`.
 
 ## Run Locally (Windows)
 
@@ -126,6 +155,7 @@ The project includes `gunicorn` and `simple-websocket` in `requirements.txt`. Th
 - **Group delivery:** Room messages are sent to members of a selected Socket.IO room.
 - **Unicast-style delivery:** Private messages target a particular connected user's session.
 - **Connection/session management:** The server maps usernames to active Socket.IO session IDs and updates presence on disconnect.
+- **Event-driven communication:** Client actions such as joining, messaging, typing, room creation, and disconnecting are handled through Socket.IO events.
 
 ## Important Limitations
 
